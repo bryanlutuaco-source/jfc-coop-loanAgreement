@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JFC COOP — Loan Agreement</title>
+<style>
+  body {
+    font-family: "Times New Roman", serif;
+    margin: 0; padding: 0;
+    background: #f9f7f2;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+  }
+  .page-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 48px 60px;
+    box-shadow: 0 2px 24px rgba(0,0,0,.08);
+    min-height: 100vh;
+  }
+  @media (max-width: 680px) { .page-wrapper { padding: 24px 20px; } }
+  h1, h2 { text-align: center; margin: 8px 0; }
+  h2 { font-size: 16px; }
+  .section-title { font-weight: bold; margin-top: 22px; }
+  .indent { margin-left: 24px; }
+
+  #banner {
+    display: none;
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #2e7d32;
+  }
+  #banner-error {
+    display: none;
+    background: #fff3e0;
+    border: 1px solid #ffcc80;
+    border-radius: 6px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #e65100;
+  }
+
+  .field-missing {
+    color: #c8102e;
+    font-style: italic;
+    background: #fff0f0;
+    border-radius: 3px;
+    padding: 0 4px;
+  }
+
+  .sig-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .sig-block { text-align: center; min-width: 220px; }
+  .sig-block .sig-label { font-weight: bold; margin-top: 8px; }
+  .sig-block .sig-title { font-size: 13px; margin-top: 2px; }
+  .sig-tabs { display: flex; gap: 4px; margin-bottom: 8px; justify-content: center; }
+  .sig-tab {
+    padding: 4px 14px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    background: #f0f0f0;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+  .sig-tab.active { background: #c8102e; color: #fff; border-color: #c8102e; }
+  .canvas-wrap {
+    position: relative;
+    width: 220px; height: 90px;
+    border: 1px dashed #aaa;
+    border-radius: 4px;
+    background: #fafafa;
+    margin: 0 auto;
+    cursor: crosshair;
+    touch-action: none;
+  }
+  .canvas-wrap canvas { display: block; }
+  .canvas-clear {
+    position: absolute;
+    top: 4px; right: 6px;
+    font-size: 11px;
+    color: #c8102e;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    background: rgba(255,255,255,.8);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .upload-area {
+    width: 220px; height: 90px;
+    border: 1px dashed #aaa;
+    border-radius: 4px;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative;
+  }
+  .upload-area img { max-width: 100%; max-height: 100%; object-fit: contain; display: none; }
+  .upload-area span { font-size: 12px; color: #888; }
+
+  .btn-row { display: flex; justify-content: center; gap: 16px; margin-top: 36px; flex-wrap: wrap; }
+  .btn { padding: 11px 28px; border: none; border-radius: 6px; font-size: 14px; font-family: Arial, sans-serif; cursor: pointer; font-weight: bold; }
+  .btn-primary   { background: #388e3c; color: #fff; }
+  .btn-secondary { background: #1565c0; color: #fff; }
+  .btn:hover { opacity: .88; }
+
+  table.ack-table { width: 100%; border-collapse: collapse; }
+  table.ack-table th, table.ack-table td {
+    border: 1px solid #333;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  table.ack-table th { background: #f0f0f0; font-weight: bold; }
+
+  @media print {
+    .sig-tabs, .canvas-clear, .btn-row, #banner, #banner-error { display: none !important; }
+    .page-wrapper { box-shadow: none; padding: 20px; }
+    body { background: #fff; }
+    .field-missing { color: #000; background: none; font-style: normal; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <table width="100%" style="margin-bottom:16px;">
+    <tr>
+      <td align="center">
+        <img src="https://iili.io/BrY1paI.png" style="max-height:80px;" alt="JFC COOP">
+      </td>
+    </tr>
+  </table>
+
+  <div id="banner">
+    ✅ Your loan agreement details have been pre-filled from your application. Please review carefully before signing.
+  </div>
+  <div id="banner-error">
+    ⚠️ Some details could not be loaded. Fields marked in red need to be filled in manually.
+  </div>
+
+  <h2>LOAN AGREEMENT</h2>
+  <p><strong>KNOW ALL MEN BY THESE PRESENT:</strong></p>
+  <h2>This Loan Agreement executed by:</h2>
+
+  <div style="margin: 24px 0;">
+    <p class="indent">
+      I/We, <strong id="f-name" class="field-missing">[Borrower Name]</strong>, of legal age, Filipino citizen with postal address at
+      <strong id="f-address" class="field-missing">[Address]</strong>, hereinafter referred to as the <strong>BORROWER</strong>;
+    </p>
+    <p class="indent">
+      <strong>JOLLIBEE FOODS CORPORATION EMPLOYEES' MULTI-PURPOSE COOPERATIVE (JFC COOP)</strong>,
+      a Cooperative duly organized and existing under the laws of the Philippines, with principal office at
+      Room 3107, 3rd Floor Jollibee Plaza Condominium, F. Ortigas Jr. Ave., Ortigas Center, Pasig City,
+      represented by the General Manager, <strong id="f-gm" class="field-missing">[General Manager]</strong>, hereinafter referred to as the <strong>JFC COOP</strong>.
+    </p>
+  </div>
+
+  <p>At the request of the BORROWER, the JFC COOP has agreed to extend to the BORROWER a loan (the "LOAN") under the terms and conditions hereinafter set forth below and on other pages hereof;</p>
+
+  <p class="section-title">Section 1. AMOUNT</p>
+  <p class="indent">
+    The LOAN which the JFC COOP has agreed to grant to the BORROWER exclusively for the following purpose(s):
+    <span id="f-purpose-a" class="field-missing">[Purpose]</span>, in the principal amount of
+    <span id="f-amount" class="field-missing">[Amount]</span>
+    (<span id="f-amountW" class="field-missing">[Amount in Words]</span>).
+  </p>
+
+  <p class="section-title">Section 2. PURPOSE</p>
+  <p class="indent">The proceeds of the LOAN shall be used by the BORROWER exclusively for: <span id="f-purpose-b" class="field-missing">[Purpose]</span>.</p>
+
+  <p class="section-title">Section 3. LOAN RELEASE</p>
+  <p class="indent">The LOAN or any portion thereof shall not be released unless all the conditions required by the JFC COOP have been complied with by the BORROWER.</p>
+  <p class="indent">a. Proof of capacity to pay</p>
+  <p class="indent">b. Authority to debit savings in case of default</p>
+
+  <p class="section-title">Section 4. PROMISSORY NOTE</p>
+  <p class="indent">Each LOAN release, renewal or extension thereof, shall be evidenced by a promissory note or notes (the "Notes") of the BORROWER on the prescribed form of the JFC COOP.</p>
+
+  <p class="section-title">Section 5. INTEREST</p>
+  <p class="indent">The LOAN shall bear interest at <span id="f-rate" class="field-missing">[Annual Interest Rate]</span> per annum using the diminishing balance method from the date of release of the LOAN at the rate indicated in the promissory note/s representing the LOAN.</p>
+
+  <p class="section-title">Section 6. MATURITY</p>
+  <p class="indent">The LOAN shall become due and payable, without need of notice, demand, presentment or any other act or deed, as follows or in accordance with a loan amortization schedule which may be updated from time to time: <span id="f-term" class="field-missing">[Maturity Schedule]</span> equal semi-monthly instalments.</p>
+
+  <p class="section-title">Section 7. SECURITY</p>
+  <p class="indent">The LOAN shall be secured by Fixed and Other Savings.</p>
+
+  <p class="section-title">Section 8. RIGHT TO SET-OFF</p>
+  <p class="indent">The BORROWER shall open and maintain a savings account with the JFC COOP during the effectivity of the LOAN. The BORROWER hereby authorizes the JFC COOP to debit, set-off or apply, at its option, upon default of the BORROWER, said deposit account or properties of the BORROWER which may come into the JFC COOP's possession, by whatever manner or whatever cause, to the payment of the LOAN or Notes or the fees, taxes, insurance premium or other expenses advanced by the JFC COOP.</p>
+
+  <p class="section-title">Section 9. ATTORNEY'S FEES</p>
+  <p class="indent">If the JFC COOP shall require the services of counsel to enforce any of its rights and remedies in and to this agreement, the JFC COOP shall be entitled to recover from the BORROWER as and for attorney's fee, a sum equal to twenty percent (20%) of the sum sought to be recovered, but in no case less than TWENTY THOUSAND PESOS (Php20,000.00).</p>
+
+  <p class="section-title">Section 10. VENUE</p>
+  <p class="indent">Any legal action or proceeding arising out of or connected with this Agreement shall be brought in the proper courts of Pasig City only.</p>
+
+  <p class="section-title">Section 11. OTHER CONDITIONS</p>
+  <p class="indent">The LOAN shall also be governed by the General Terms and Conditions Governing Credit Transactions with JFC COOP which are made integral part of this contract.</p>
+
+  <h2 style="margin-top:36px;">PROMISSORY NOTE</h2>
+  <p>
+    I hereby promise to pay to the order of JOLLIBEE FOODS CORPORATION EMPLOYEES' MULTI-PURPOSE COOPERATIVE
+    (hereinafter referred to as "JFC COOP"), the sum of <span id="f-amount-b" class="field-missing">[Amount]</span>
+    (<span id="f-amountW-b" class="field-missing">[Amount in Words]</span>), Philippine currency,
+    in <span id="f-term-b" class="field-missing">[Term]</span> equal semi-monthly instalments beginning
+    <span id="f-start" class="field-missing">[Start Date]</span> through salary deductions/over the counter/bank transfer/post-dated checks payment.
+  </p>
+  <p>Provided however that in case of any default in payment, death, disability, resignation, termination or separation from my employment with JOLLIBEE, all my investment deposited with the JFC COOP (shares, other savings and benefits including dividend, patronage refund and damayan fund) shall be applied to the unpaid balance of this loan, including interest, charges/fines thereon.</p>
+  <p>In case said investments are not sufficient to pay the amount of said unpaid balance, all benefits arising out of my employment with JOLLIBEE shall further be applied to the value of this note. <strong>IN CASE THE ABOVE MENTIONED IS NOT SUFFICIENT TO SETTLE THE LOAN, NECESSARY LEGAL ACTION SHALL APPLY.</strong></p>
+
+  <h2 style="margin-top:36px;">AUTHORIZATION</h2>
+  <p><strong>FOR EMPLOYED MEMBER OF JFC GROUP OF COMPANIES, AFFILIATES, SUBSIDIARIES AND FRANCHISES:</strong> I do hereby authorize JFC COOP through Jollibee Worldwide Services Pte. Ltd. (for Regular Members) / thru payroll accounting (Franchise Members) to deduct from my semi-monthly salary until loan, including interest, charges/fines thereon, is paid in full.</p>
+  <p>In case of any default in payment, death, disability, resignation, termination or separation from my employment with JOLLIBEE, I do hereby waive in favor of JFC COOP all my investments deposited with the JFC COOP.</p>
+  <p>These shall be applied to the unpaid balance of this loan, including interest, charges/fines thereon. If insufficient, all benefits due arising from my employment (retirement, separation, etc.) shall be applied.</p>
+  <p><strong>IN CASE THE ABOVE MENTIONED IS NOT SUFFICIENT TO SETTLE THE LOAN, NECESSARY LEGAL ACTION SHALL APPLY.</strong></p>
+  <p><strong>RETAINED MEMBERS:</strong> I do hereby waive in favor of JFC COOP all my investments deposited with the JFC COOP. These shall be applied to the unpaid balance of this loan, including interest, charges/fines thereon.</p>
+  <p>IN CASE THE ABOVE MENTIONED IS NOT SUFFICIENT TO SETTLE THE LOAN, NECESSARY LEGAL ACTION SHALL APPLY.</p>
+  <p style="text-align:justify;">IN WITNESS WHEREOF, the parties hereto affix their respective signatures this __________ at Pasig City.</p>
+
+  <div class="sig-wrapper">
+
+    <div class="sig-block">
+      <div class="sig-tabs">
+        <button class="sig-tab active" onclick="setMode('left','draw',this)">Draw</button>
+        <button class="sig-tab" onclick="setMode('left','upload',this)">Upload</button>
+      </div>
+      <div id="left-draw" class="canvas-wrap">
+        <canvas id="canvas-left" width="220" height="90"></canvas>
+        <span class="canvas-clear" onclick="clearCanvas('canvas-left')">Clear</span>
+      </div>
+      <label id="left-upload" class="upload-area" style="display:none;">
+        <span id="left-placeholder">Click to upload signature</span>
+        <img id="left-img" alt="Signature">
+        <input type="file" accept="image/*" style="display:none;" onchange="loadUpload(event,'left-img','left-placeholder')">
+      </label>
+      <div class="sig-label" style="margin-top:12px;">
+        JOLLIBEE FOODS CORPORATION<br>EMPLOYEES' MULTI-PURPOSE COOPERATIVE<br>(JFC COOP)
+      </div>
+      <div class="sig-title"><strong id="f-gm-b" class="field-missing">[General Manager]</strong><br>General Manager</div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-tabs">
+        <button class="sig-tab active" onclick="setMode('right','draw',this)">Draw</button>
+        <button class="sig-tab" onclick="setMode('right','upload',this)">Upload</button>
+      </div>
+      <div id="right-draw" class="canvas-wrap">
+        <canvas id="canvas-right" width="220" height="90"></canvas>
+        <span class="canvas-clear" onclick="clearCanvas('canvas-right')">Clear</span>
+      </div>
+      <label id="right-upload" class="upload-area" style="display:none;">
+        <span id="right-placeholder">Click to upload signature</span>
+        <img id="right-img" alt="Signature">
+        <input type="file" accept="image/*" style="display:none;" onchange="loadUpload(event,'right-img','right-placeholder')">
+      </label>
+      <div class="sig-label" style="margin-top:12px;"><span id="f-name-b" class="field-missing">[Borrower Name]</span></div>
+      <div class="sig-title">Borrower</div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:50px;">
+    <h2>ACKNOWLEDGEMENT</h2>
+    <p>
+      REPUBLIC OF THE PHILIPPINES )<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) S.S
+    </p>
+    <p style="text-align:justify;">
+      BEFORE ME, a notary public for and in ………………………………… day of ……………………………….... personally, appeared the following persons, with their residence certificates and/or government issued identification cards bearing their photographs and signatures, to wit:
+    </p>
+    <table class="ack-table">
+      <tr>
+        <th>NAME</th>
+        <th>GOV'T ISSUED ID</th>
+        <th>DATE/PLACE ISSUED</th>
+      </tr>
+      <tr>
+        <td><strong>Cherry P. Gonzales</strong></td>
+        <td id="fg-govid-gm">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td id="fg-name" class="field-missing">[Borrower Name]</td>
+        <td id="fg-govid" class="field-missing">[Gov ID]</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    <p style="text-align:justify; margin-top:16px;">
+      Known to me and to me known to be the same persons who executed the foregoing instrument and they acknowledge to me that the same is their free and voluntary act and deed as well as the free and voluntary act and deed of the corporation they represent.
+    </p>
+    <p style="text-align:justify;">
+      This instrument consisting of 2 pages including this page whereon the acknowledgement clause is written, signed by the parties and their instrumental witnesses on each and every page hereof, sealed with my notarial seal, pertains to a Loan Agreement.
+    </p>
+    <p>WITNESS MY HAND AND SEAL on the date and place first above-written.</p>
+    <strong><h4>Notary Public</h4></strong>
+    <table width="100%" style="border-collapse:collapse; margin-top:12px;">
+      <tr><td>Doc. No. ………………;</td><td>Until December 31, 20 ………………</td></tr>
+      <tr><td>Pages No. ……………..;</td><td>PTR No………………………………</td></tr>
+      <tr><td>Book No. ………………;</td><td>Issued on …………………………….</td></tr>
+      <tr><td>Series of 20……………..;</td><td>Issued at………………………………</td></tr>
+    </table>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="downloadPDF()">⬇ Download as PDF</button>
+    <button class="btn btn-secondary" onclick="printPage()">🖨 Print</button>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+//  AUTO-FILL FROM ?data= TOKEN
+//  Keys match Apps Script payload:
+//  name, address, purpose, amount, amountInWords,
+//  termSemiMonth, annualInt, startDate, govId, generalManager
+// ============================================================
+(function prefill() {
+  const params = new URLSearchParams(window.location.search);
+  const raw    = params.get("data");
+
+  if (!raw) return; // no token — leave all fields as red placeholders
+
+  let p;
+  try {
+    // Decode base64url → JSON (same encoding Apps Script uses)
+    const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');
+    const padded  = base64 + '=='.slice((base64.length % 4) || 4);
+    p = JSON.parse(atob(padded));
+  } catch(e) {
+    console.warn("Could not parse data token:", e);
+    document.getElementById("banner-error").style.display = "block";
+    return;
+  }
+
+  // Fill an element and remove the red missing style
+  function fill(id, val) {
+    if (!val || !val.toString().trim()) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val.toString().trim();
+    el.classList.remove("field-missing");
+  }
+
+  // ── FIXED: keys now match Apps Script payload exactly ──
+  fill("f-name",       p.name);           // Borrower Name
+  fill("f-name-b",     p.name);           // Borrower Name (sig block)
+  fill("f-address",    p.address);        // Address
+  fill("f-gm",         p.generalManager); // General Manager
+  fill("f-gm-b",       p.generalManager); // General Manager (sig block)
+  fill("f-purpose-a",  p.purpose);        // Purpose (Section 1)
+  fill("f-purpose-b",  p.purpose);        // Purpose (Section 2)
+  fill("f-amount",     p.amount);         // Amount (Section 1)
+  fill("f-amount-b",   p.amount);         // Amount (Promissory Note)
+  fill("f-amountW",    p.amountInWords);  // Amount in Words (Section 1)
+  fill("f-amountW-b",  p.amountInWords);  // Amount in Words (Promissory Note)
+  fill("f-term",       p.termSemiMonth);  // Term / Maturity (Section 6)
+  fill("f-term-b",     p.termSemiMonth);  // Term (Promissory Note)
+  fill("f-rate",       p.annualInt);      // Annual Interest Rate
+  fill("f-start",      p.startDate);      // Start Date
+  fill("fg-name",      p.name);           // Borrower Name (Acknowledgement)
+  fill("fg-govid",     p.govId);          // Gov ID (Acknowledgement)
+
+  // Show correct banner
+  const missing = document.querySelectorAll(".field-missing").length;
+  if (missing > 0) {
+    document.getElementById("banner-error").style.display = "block";
+  } else {
+    document.getElementById("banner").style.display = "block";
+  }
+})();
+
+
+// ============================================================
+//  SIGNATURE TABS
+// ============================================================
+function setMode(side, mode, btn) {
+  btn.closest('.sig-block').querySelectorAll('.sig-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(side + '-draw').style.display   = mode === 'draw'   ? 'block' : 'none';
+  document.getElementById(side + '-upload').style.display = mode === 'upload' ? 'flex'  : 'none';
+}
+
+
+// ============================================================
+//  CANVAS DRAWING
+// ============================================================
+(function setupCanvases() {
+  ['canvas-left', 'canvas-right'].forEach(id => {
+    const canvas = document.getElementById(id);
+    const ctx    = canvas.getContext('2d');
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth   = 1.8;
+    ctx.lineCap     = 'round';
+    let drawing = false, lastX = 0, lastY = 0;
+
+    function getPos(e) {
+      const r = canvas.getBoundingClientRect();
+      const s = e.touches ? e.touches[0] : e;
+      return [s.clientX - r.left, s.clientY - r.top];
+    }
+    function start(e) { drawing = true; [lastX, lastY] = getPos(e); e.preventDefault(); }
+    function draw(e) {
+      if (!drawing) return;
+      const [x, y] = getPos(e);
+      ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y); ctx.stroke();
+      [lastX, lastY] = [x, y]; e.preventDefault();
+    }
+    function stop() { drawing = false; }
+
+    canvas.addEventListener('mousedown',  start);
+    canvas.addEventListener('mousemove',  draw);
+    canvas.addEventListener('mouseup',    stop);
+    canvas.addEventListener('mouseleave', stop);
+    canvas.addEventListener('touchstart', start, {passive: false});
+    canvas.addEventListener('touchmove',  draw,  {passive: false});
+    canvas.addEventListener('touchend',   stop);
+  });
+})();
+
+function clearCanvas(id) {
+  const c = document.getElementById(id);
+  c.getContext('2d').clearRect(0, 0, c.width, c.height);
+}
+
+
+// ============================================================
+//  UPLOAD SIGNATURE
+// ============================================================
+function loadUpload(event, imgId, placeholderId) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function() {
+    const img = document.getElementById(imgId);
+    img.src = reader.result;
+    img.style.display = 'block';
+    document.getElementById(placeholderId).style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+
+// ============================================================
+//  BAKE CANVAS SIGNATURES BEFORE PRINT
+// ============================================================
+function bakeCanvases() {
+  [['canvas-left','left-draw'], ['canvas-right','right-draw']].forEach(([cid, wrapId]) => {
+    const canvas = document.getElementById(cid);
+    const wrap   = document.getElementById(wrapId);
+    if (!wrap || wrap.style.display === 'none') return;
+    const blank = document.createElement('canvas');
+    blank.width = canvas.width; blank.height = canvas.height;
+    if (canvas.toDataURL() === blank.toDataURL()) return;
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL();
+    img.style.cssText = 'width:220px;height:90px;object-fit:contain;border:1px dashed #aaa;border-radius:4px;display:block;margin:0 auto;';
+    wrap.replaceWith(img);
+  });
+}
+
+function downloadPDF() { bakeCanvases(); window.print(); }
+function printPage()   { bakeCanvases(); window.print(); }
+</script>
+</body>
+</html>
