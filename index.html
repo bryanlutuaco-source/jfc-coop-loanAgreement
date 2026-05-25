@@ -156,7 +156,7 @@
       <strong>JOLLIBEE FOODS CORPORATION EMPLOYEES' MULTI-PURPOSE COOPERATIVE (JFC COOP)</strong>,
       a Cooperative duly organized and existing under the laws of the Philippines, with principal office at
       Room 3107, 3rd Floor Jollibee Plaza Condominium, F. Ortigas Jr. Ave., Ortigas Center, Pasig City,
-      represented by the General Manager, <strong id="f-gm" class="field-missing">[General Manager]</strong>, hereinafter referred to as the <strong>JFC COOP</strong>.
+      represented by the General Manager, <strong id="f-gm" class="field-missing">Cherry P. Gonzales</strong>, hereinafter referred to as the <strong>JFC COOP</strong>.
     </p>
   </div>
 
@@ -222,12 +222,12 @@
   <h2 class="p2-h"><u>PROMISSORY NOTE</u></h2>
   <p class="sec2">
     I hereby promise to pay to the order of JOLLIBEE FOODS CORPORATION EMPLOYEES' MULTI-PURPOSE COOPERATIVE (hereinafter referred to as "JFC COOP"), the sum of
-    <u><span id="f-amountW-b" class="field-missing"><u>[Amount in Words]</u></span></u>
-    <u>(<span id="f-amount-b" class="field-missing"><u>Php [Amount]</u></span>)</u>,
+    <span id="f-amountW-b" class="field-missing"><u>[Amount in Words]</u></span>
+    (<span id="f-amount-b" class="field-missing"><u>[Amount]</u></span>),
     Philippine currency, in
-    <u><span id="f-term-b" class="field-missing"><u>[Term]</u></span></u>
-    equal semi-monthly installment beginning
-   <u><span id="f-start-b" class="field-missing"><u>[Start Date]</span></u>
+    <span id="f-term-b" class="field-missing"><u>[Term]</u></span>
+    equal semi-monthly instalments beginning
+    <span id="f-start-b" class="field-missing"><u>[Start Date]</u></span>
     and every
     <u><span id="f-paymentSched" class="field-missing">[Payment Schedule]</span></u>
     through salary deductions/over the counter/bank transfer/post-dated checks payment.
@@ -260,7 +260,7 @@
         <input type="file" accept="image/*" style="display:none;" onchange="loadUpload(event,'left-img','left-placeholder')">
       </label>
       <div class="sig-label">JOLLIBEE FOODS CORPORATION<br>EMPLOYEES' MULTI-PURPOSE COOPERATIVE<br>(JFC COOP)</div>
-      <div class="sig-title"><strong id="f-gm-b" class="field-missing">[General Manager]</strong><br>General Manager</div>
+      <div class="sig-title"><strong id="f-gm-b" class="field-missing">Cherry P. Gonzales</strong><br>General Manager</div>
     </div>
 
     <div class="sig-block">
@@ -369,24 +369,8 @@
 
   fill("f-purpose-b", p.purpose);
 
-  // fillAmount — prepends "PHP " and formats with commas e.g. PHP 480,000
-  function fillAmount(id, val) {
-    if (!val || !val.toString().trim()) return;
-    const el = document.getElementById(id);
-    if (!el) return;
-    // Strip any existing Php/PHP prefix
-    let cleaned = val.toString().trim().replace(/^(php|PHP|Php)\s*/i, "");
-    // If it's a plain number (no commas yet), format with commas
-    const num = parseFloat(cleaned.replace(/,/g, ""));
-    if (!isNaN(num)) {
-      cleaned = num.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-    }
-    el.textContent = "PHP " + cleaned;
-    el.classList.remove("field-missing");
-  }
-
-  fillAmount("f-amount",   p.amount);
-  fillAmount("f-amount-b", p.amount);
+  fill("f-amount",    p.amount);
+  fill("f-amount-b",  p.amount);
   fill("f-amountW",   p.amountInWords);
   fill("f-amountW-b", p.amountInWords);
 
