@@ -19,6 +19,7 @@
     background: #fff;
     padding: 40px 56px;
     box-shadow: 0 2px 24px rgba(0,0,0,.08);
+    position: relative;
   }
   @media (max-width: 680px) { .page-wrapper { padding: 20px 16px; } }
 
@@ -95,6 +96,73 @@
   .sec2 { font-size: 11.5px; margin-bottom: 5px; }
 
   /* ══════════════════════════════════════
+     SIGNATURE PREVIEWS — below Section 13
+  ══════════════════════════════════════ */
+  #sig-previews-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    margin: 16px 0 10px 0;
+  }
+
+  .sig-preview-block {
+    text-align: center;
+    min-width: 160px;
+    display: none;
+  }
+  .sig-preview-block .preview-label {
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .sig-preview-block .preview-img-wrap {
+    width: 180px;
+    height: 60px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+  .sig-preview-block .preview-img-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: none;
+  }
+  .sig-preview-block .preview-img-wrap .preview-placeholder {
+    font-size: 9px;
+    color: #bbb;
+    font-family: Arial, sans-serif;
+  }
+  .sig-preview-block .preview-name {
+    font-size: 10px;
+    color: #444;
+    margin-top: 3px;
+    border-top: 1px solid #333;
+    width: 180px;
+    padding-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+  }
+  .sig-preview-block .preview-title {
+    font-size: 9.5px;
+    color: #444;
+    font-family: "Times New Roman", serif;
+    margin-top: 1px;
+  }
+
+  /* ══════════════════════════════════════
      PRINT STYLES — long bond 8.5 × 13 in
   ══════════════════════════════════════ */
   @media print {
@@ -128,6 +196,26 @@
 
     .notary-table td { padding: 3px 2px; font-size: 9.5px; line-height: 1.55; }
     .p2-h { margin-top: 10px !important; }
+
+    /* Preview on print */
+    #sig-previews-wrap {
+      margin: 12px 0 8px 0;
+      gap: 24px;
+    }
+    .sig-preview-block .preview-img-wrap {
+      width: 155px;
+      height: 52px;
+    }
+    .sig-preview-block .preview-name {
+      font-size: 9px;
+      width: 155px;
+    }
+    .sig-preview-block .preview-title {
+      font-size: 8.5px;
+    }
+    .sig-preview-block .preview-label {
+      font-size: 8px;
+    }
   }
 </style>
 </head>
@@ -208,9 +296,38 @@
   <strong><p class="sec indent"><u>Fixed and Other Savings.</u></p></strong>
 
   <p class="sec"><strong>Section 10. RIGHT TO SET-OFF -</strong> The BORROWER shall open and maintain a savings account with the JFC COOP during the effectivity of the LOAN. The BORROWER hereby authorizes the JFC COOP to debit, set-off or apply, at its option, upon default of the BORROWER, said deposit account or properties of the BORROWER which may come into the JFC COOP's possession, by whatever manner or whatever cause, to the payment of the LOAN or Notes or the fees, taxes, insurance premium or other expenses advance by the JFC COOP. For this purpose, the BORROWER, hereby irrevocably appoints JFC COOP as its attorney-in-fact to sell or dispose of such properties and apply the proceeds thereof to the payment of the LOAN or the Notes or said advances.</p>
+
   <p class="sec"><strong>Section 11. ATTORNEY'S FEES -</strong> If the JFC COOP shall require the services of counsel to enforce any of its rights and remedies in and to this agreement, the Notes, the Collateral and related documents, the JFC COOP shall be entitled to recover from the BORROWER as and for attorney's fee, a sum equal to twenty percent (20%) of the sum sought to be recovered. In no case shall the attorney's fees be less than TWENTY THOUSAND PESOS (Php20,000.00), in addition to costs of suit and all other fees and expenses incurred by and reimbursable to the JFC COOP by the BORROWER.</p>
+
   <p class="sec"><strong>Section 12. VENUE -</strong> Any legal action of proceeding arising out of or connected with this Agreement, the Notes, the Collateral and related documents shall be brought in the proper courts of Pasig City only, the BORROWER waiving for this purpose any other venue provided for in the Rules of Court.</p>
   <p class="sec"><strong>Section 13. OTHER CONDITIONS -</strong> The LOAN shall also be governed by the General Terms and Conditions Governing Credit Transactions with JFC COOP which are made integral part of this contract.</p>
+
+  <!-- ══════════════════════════════════════════════════
+       DUAL SIGNATURE PREVIEWS — right-aligned, below Section 13
+  ══════════════════════════════════════════════════ -->
+  <div id="sig-previews-wrap">
+
+    <!-- GM Preview (left of pair) -->
+    <div class="sig-preview-block" id="gm-preview-block">
+      <div class="preview-img-wrap" id="gm-preview-wrap">
+        <img id="gm-preview-img" alt="GM Signature">
+        <span class="preview-placeholder" id="gm-placeholder">GM signature</span>
+      </div>
+      <div class="preview-name">Cherry P. Gonzales</div>
+      <div class="preview-title">General Manager, JFC COOP</div>
+    </div>
+
+    <!-- Borrower Preview (right of pair) -->
+    <div class="sig-preview-block" id="borrower-preview-block">
+      <div class="preview-img-wrap" id="borrower-preview-wrap">
+        <img id="borrower-preview-img" alt="Borrower Signature">
+        <span class="preview-placeholder" id="borrower-placeholder">Borrower signature</span>
+      </div>
+      <div class="preview-name"><span id="preview-borrower-name">[Borrower Name]</span></div>
+      <div class="preview-title">Borrower</div>
+    </div>
+
+  </div>
 
   <!-- ══════════════════  PAGE 2  ══════════════════ -->
   <div class="page-break"></div>
@@ -245,6 +362,7 @@
 
   <!-- SIGNATURES -->
   <div class="sig-wrapper">
+    <!-- LEFT: JFC COOP / GM -->
     <div class="sig-block">
       <div class="sig-tabs">
         <button class="sig-tab active" onclick="setMode('left','draw',this)">Draw</button>
@@ -257,12 +375,13 @@
       <label id="left-upload" class="upload-area" style="display:none;">
         <span id="left-placeholder">Click to upload signature</span>
         <img id="left-img" alt="Signature">
-        <input type="file" accept="image/*" style="display:none;" onchange="loadUpload(event,'left-img','left-placeholder')">
+        <input type="file" accept="image/*" style="display:none;" onchange="loadUpload(event,'left-img','left-placeholder','gm')">
       </label>
       <div class="sig-label">JOLLIBEE FOODS CORPORATION<br>EMPLOYEES' MULTI-PURPOSE COOPERATIVE<br>(JFC COOP)</div>
       <div class="sig-title"><strong id="f-gm-b" class="field-missing">Cherry P. Gonzales</strong><br>General Manager</div>
     </div>
 
+    <!-- RIGHT: Borrower -->
     <div class="sig-block">
       <div class="sig-tabs">
         <button class="sig-tab active" onclick="setMode('right','draw',this)">Draw</button>
@@ -275,7 +394,7 @@
       <label id="right-upload" class="upload-area" style="display:none;">
         <span id="right-placeholder">Click to upload signature</span>
         <img id="right-img" alt="Signature">
-        <input type="file" accept="image/*" style="display:none;" onchange="loadUpload(event,'right-img','right-placeholder')">
+        <input type="file" accept="image/*" style="display:none;" onchange="loadUpload(event,'right-img','right-placeholder','borrower')">
       </label>
       <div class="sig-label"><span id="f-name-b" class="field-missing">[Borrower Name]</span></div>
       <div class="sig-title">Borrower</div>
@@ -326,6 +445,7 @@
 </div>
 
 <script>
+/* ─── PREFILL ─── */
 (function prefill() {
   const params = new URLSearchParams(window.location.search);
   const raw    = params.get("data");
@@ -349,9 +469,6 @@
     el.classList.remove("field-missing");
   }
 
-  // ── Format annual interest rate as percentage ──
-  // If stored as decimal (e.g. 0.14), convert → "14%"
-  // If stored as whole number (e.g. 14), just append "%"
   function formatRate(val) {
     if (!val && val !== 0) return "";
     const num = parseFloat(val);
@@ -360,23 +477,17 @@
     return pct % 1 === 0 ? pct.toFixed(0) + "%" : pct.toFixed(2).replace(/\.?0+$/, "") + "%";
   }
 
-  // Core fields
   fill("f-name",    p.name);
-  fill("f-name-b",  p.name);
   fill("f-address", p.address);
   fill("f-gm",      p.generalManager);
   fill("f-gm-b",    p.generalManager);
-
   fill("f-purpose-b", p.purpose);
 
-  // fillAmount — prepends "PHP " and formats with commas e.g. PHP 480,000
   function fillAmount(id, val) {
     if (!val || !val.toString().trim()) return;
     const el = document.getElementById(id);
     if (!el) return;
-    // Strip any existing Php/PHP prefix
     let cleaned = val.toString().trim().replace(/^(php|PHP|Php)\s*/i, "");
-    // If it's a plain number (no commas yet), format with commas
     const num = parseFloat(cleaned.replace(/,/g, ""));
     if (!isNaN(num)) {
       cleaned = num.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -390,33 +501,57 @@
   fill("f-amountW",   p.amountInWords);
   fill("f-amountW-b", p.amountInWords);
 
-  // Interest — words + rate formatted as percentage
   fill("f-rateWords", p.annualIntWords);
   if (p.annualInt) {
-    const rateFormatted = formatRate(p.annualInt);
-    fill("f-rate", rateFormatted);
+    fill("f-rate", formatRate(p.annualInt));
   }
 
-  // Term / dates
   fill("f-term-b",  p.termSemiMonth);
   fill("f-start",   p.startDate);
   fill("f-start-b", p.startDate);
-  fill("f-end",     p.endDate);           // ← NEW: End of Deduction
+  fill("f-end",     p.endDate);
+  fill("f-paymentSched", p.paymentSched);
 
-  // Payment schedule
-  fill("f-paymentSched", p.paymentSched); // ← NEW: Payment Schedule
-
-  // Acknowledgement table
   fill("fg-name",  p.name);
   fill("fg-govid", p.govId);
   fill("fg-date",  p.govIdDatePlace);
 
-  // Banner
+  // Sync borrower name on both signature labels and preview
+  if (p.name) {
+    const nameEls = document.querySelectorAll('#f-name-b');
+    nameEls.forEach(el => { el.textContent = p.name; el.classList.remove('field-missing'); });
+    document.getElementById('preview-borrower-name').textContent = p.name;
+  }
+
   const missing = document.querySelectorAll(".field-missing").length;
   document.getElementById(missing > 0 ? "banner-error" : "banner").style.display = "block";
 })();
 
-// ── Signature tab toggle ──
+
+/* ─── PREVIEW HELPERS ─── */
+function showPreview(who, dataUrl) {
+  // who = 'gm' | 'borrower'
+  const block         = document.getElementById(who + '-preview-block');
+  const imgEl         = document.getElementById(who + '-preview-img');
+  const placeholderEl = document.getElementById(who + '-placeholder');
+  imgEl.src = dataUrl;
+  imgEl.style.display = 'block';
+  if (placeholderEl) placeholderEl.style.display = 'none';
+  if (block) block.style.display = 'block';
+}
+
+function hidePreview(who) {
+  const block         = document.getElementById(who + '-preview-block');
+  const imgEl         = document.getElementById(who + '-preview-img');
+  const placeholderEl = document.getElementById(who + '-placeholder');
+  imgEl.src = '';
+  imgEl.style.display = 'none';
+  if (placeholderEl) placeholderEl.style.display = 'block';
+  if (block) block.style.display = 'none';
+}
+
+
+/* ─── SIGNATURE TAB TOGGLE ─── */
 function setMode(side, mode, btn) {
   btn.closest('.sig-block').querySelectorAll('.sig-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -424,25 +559,35 @@ function setMode(side, mode, btn) {
   document.getElementById(side + '-upload').style.display = mode === 'upload' ? 'flex'  : 'none';
 }
 
-// ── Canvas drawing ──
+
+/* ─── CANVAS DRAWING ─── */
 (function setupCanvases() {
-  ['canvas-left', 'canvas-right'].forEach(id => {
+  [['canvas-left', 'gm'], ['canvas-right', 'borrower']].forEach(([id, who]) => {
     const canvas = document.getElementById(id);
     const ctx    = canvas.getContext('2d');
     ctx.strokeStyle = '#000'; ctx.lineWidth = 1.8; ctx.lineCap = 'round';
     let drawing = false, lastX = 0, lastY = 0;
+
     function getPos(e) {
       const r = canvas.getBoundingClientRect(), s = e.touches ? e.touches[0] : e;
       return [s.clientX - r.left, s.clientY - r.top];
     }
     function start(e) { drawing = true; [lastX, lastY] = getPos(e); e.preventDefault(); }
-    function draw(e)  {
+    function draw(e) {
       if (!drawing) return;
       const [x, y] = getPos(e);
       ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y); ctx.stroke();
       [lastX, lastY] = [x, y]; e.preventDefault();
     }
-    function stop() { drawing = false; }
+    function stop() {
+      drawing = false;
+      const blank = document.createElement('canvas');
+      blank.width = canvas.width; blank.height = canvas.height;
+      if (canvas.toDataURL() !== blank.toDataURL()) {
+        showPreview(who, canvas.toDataURL());
+      }
+    }
+
     canvas.addEventListener('mousedown',  start);
     canvas.addEventListener('mousemove',  draw);
     canvas.addEventListener('mouseup',    stop);
@@ -456,29 +601,39 @@ function setMode(side, mode, btn) {
 function clearCanvas(id) {
   const c = document.getElementById(id);
   c.getContext('2d').clearRect(0, 0, c.width, c.height);
+  const who = id === 'canvas-left' ? 'gm' : 'borrower';
+  hidePreview(who);
 }
 
-function loadUpload(event, imgId, placeholderId) {
+
+/* ─── FILE UPLOAD (auto-syncs to preview) ─── */
+function loadUpload(event, imgId, placeholderId, who) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = function () {
+    // Show in the signature block
     const img = document.getElementById(imgId);
     img.src = reader.result;
     img.style.display = 'block';
     document.getElementById(placeholderId).style.display = 'none';
+    // Instantly mirror to the Section 13 preview
+    showPreview(who, reader.result);
   };
   reader.readAsDataURL(file);
 }
 
+
+/* ─── BAKE CANVASES BEFORE PRINT ─── */
 function bakeCanvases() {
-  [['canvas-left', 'left-draw'], ['canvas-right', 'right-draw']].forEach(([cid, wrapId]) => {
+  [['canvas-left', 'left-draw', 'gm'], ['canvas-right', 'right-draw', 'borrower']].forEach(([cid, wrapId, who]) => {
     const canvas = document.getElementById(cid);
     const wrap   = document.getElementById(wrapId);
     if (!wrap || wrap.style.display === 'none') return;
     const blank = document.createElement('canvas');
     blank.width = canvas.width; blank.height = canvas.height;
     if (canvas.toDataURL() === blank.toDataURL()) return;
+    showPreview(who, canvas.toDataURL());
     const img = document.createElement('img');
     img.src = canvas.toDataURL();
     img.style.cssText = 'width:210px;height:75px;object-fit:contain;border:1px dashed #aaa;border-radius:4px;display:block;margin:0 auto;';
